@@ -2,7 +2,7 @@
 
 CREATE TABLE IF NOT EXISTS genres (
 	genres_id SERIAL PRIMARY KEY,
-	name VARCHAR(60) UNIQUE NOT NULL);
+	name_genres VARCHAR(60) UNIQUE NOT NULL);
 
 -- Таблица исполнителей
 
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS genresactors (
 
 CREATE TABLE IF NOT EXISTS album (
 	album_id SERIAL PRIMARY KEY,
-	name VARCHAR(60) NOT NULL,
+	name_album VARCHAR(60) NOT NULL,
 	year_public INTEGER NOT NULL);
 
 -- Таблица альбомов и исполнителей(многие-ко-многим)
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS actorsalbum (
 CREATE TABLE IF NOT EXISTS track (
 	track_id SERIAL PRIMARY KEY,
 	album_id INTEGER NOT NULL REFERENCES album(album_id),
-	name VARCHAR NOT NULL,
+	name_track VARCHAR NOT NULL,
 	duration INTERVAL NOT NULL);
 
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS track (
 
 CREATE TABLE IF NOT EXISTS collection (
 	collection_id SERIAL PRIMARY KEY,
-	name VARCHAR NOT NULL,
+	name_collection VARCHAR NOT NULL,
 	year_public INTEGER NOT NULL);
 	
 --Таблица треков и сборников(многие-ко-многим)

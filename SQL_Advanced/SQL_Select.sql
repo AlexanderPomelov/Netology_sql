@@ -22,8 +22,8 @@ WHERE name NOT LIKE ('% %');
 --Задание 2.5.
 
 SELECT name_track FROM track
-WHERE name_track  LIKE ('My%');
-
+WHERE 'мой' = ANY(string_to_array(lower(name_track), ' ')) OR
+      'my' = ANY(string_to_array(lower(name_track), ' '));
 
 --Задание 3.1.
 
@@ -33,10 +33,9 @@ GROUP BY name_genres;
 
 --Задание 3.2.
 
-SELECT name_album, COUNT(*) FROM track t
-JOIN album a ON a.album_id =t.album_id 
-WHERE year_public BETWEEN 2019 AND 2020
-GROUP BY name_album;
+SELECT COUNT(track_id) FROM track t 
+JOIN album a  ON a.album_id = t.album_id 
+WHERE year_public BETWEEN 2019 and 2020; 
 
 --Задание 3.3.
 
@@ -47,10 +46,13 @@ ORDER BY avg;
 
 --Задание 3.4.
 
-SELECT name, year_public  FROM actors a  
-JOIN actorsalbum a2 ON a.actors_id = a2.actors_id  
-JOIN album a3 ON a2.album_id = a3.album_id
-WHERE year_public != 2020; 
+SELECT name FROM actors a 
+WHERE name NOT IN (
+    SELECT name FROM actors a2 
+    JOIN actorsalbum ab ON a2.actors_id = ab.actors_id  
+	JOIN album a3 ON ab.album_id = a3.album_id 
+    WHERE year_public = 2020
+);
 
 --Задание 3.5.
 
@@ -64,14 +66,13 @@ WHERE name = 'The Beatles';
  
 --Задание 4.1.
 
-/*
-SELECT * FROM album a 
+SELECT DISTINCT name_album 
+FROM album a  
 JOIN actorsalbum a2 ON a.album_id = a2.album_id 
-JOIN actors a3 ON a2.actors_id = a3.actors_id 
-JOIN genresactors g ON a3.actors_id =g.actors_id
-JOIN genres g2 ON g.genres_id = g2.genres_id
-*/
-
+JOIN actors a3 ON a2.actors_id = a3.actors_id  
+JOIN genresactors g ON a3.actors_id =g.actors_id 
+GROUP BY name_album, g.actors_id  
+HAVING COUNT(genres_id) > 1; 
 
 --Задание 4.2.
 
@@ -82,18 +83,26 @@ WHERE t2.track_id IS NULL;
 
 --Задание 4.3.
 
-SELECT name, MIN(duration) FROM track t  
-JOIN album a ON a.album_id = t.album_id
-JOIN actorsalbum a2 ON a.album_id = a2.album_id
-JOIN actors a3 ON a2.actors_id = a3.actors_id
-GROUP BY name;
-
+SELECT name 
+FROM actors a 
+JOIN actorsalbum ab  ON ab.actors_id  = a.actors_id  
+JOIN album a2  ON a2.album_id  = ab.album_id  
+JOIN track t  ON t.album_id  = a2.album_id  
+WHERE duration = ( 
+SELECT MIN(duration) FROM track t2  
+JOIN actorsalbum a3  ON a3.album_id = t2.album_id
+);
 
 
 --Задание 4.4.
 
-SELECT name_album, COUNT(name_track) FROM album a 
-JOIN track t ON t.album_id = a.album_id
-GROUP BY name_album 
-HAVING COUNT(name_track) < 3;
-
+SELECT name_album 
+FROM album a  
+JOIN track t ON t.track_id = a.album_id  
+GROUP BY album_id 
+HAVING COUNT(name_track) = ( 
+SELECT COUNT(track_id) FROM track t2 
+GROUP BY album_id  
+ORDER BY 1 
+LIMIT 1 
+);
