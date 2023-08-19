@@ -9,7 +9,7 @@ VALUES ('The Beatles'),
 	   
 --Наполнение таблицы жанров
 	   
-INSERT INTO genres (name)
+INSERT INTO genres (name_genres)
 VALUES ('Rock'),
 	   ('Pop'),
 	   ('Dance'),
@@ -29,7 +29,7 @@ VALUES 	(1, 1), (1, 4), (1, 5),
 	   
 --Наполнение таблицы альбомов
 	   
-INSERT INTO album (name, year_public)
+INSERT INTO album (name_album, year_public)
 VALUES ('Help!', 1965),('Revolver', 1966),
 	   ('Forever, Michael', 1975),('Bad', 1987),
 	   ('Harum Scarum',1965),('Spinout' , 1966),
@@ -47,7 +47,7 @@ VALUES 	(1, 1), (1, 2),
 	   
 --Наполнение таблицы треков
 	  
-INSERT INTO track (album_id, name, duration)
+INSERT INTO track (album_id, name_track, duration)
 VALUES 	(1, 'Help!', '00:02:16'), (1, 'The Night Before', '00:02:30'), (1, 'Another Girl', '00:02:02'),
 	   	(2, 'Taxman', '00:02:39'), (2, 'Love You To', '00:03:01'), (2, 'Yellow Submarine', '00:02:42'),
 		(3, 'Were Almost There', '00:03:41'), (3, 'Take Me Back', '00:03:29') , (3, 'Dapper Dan', '00:03:08'),
@@ -62,7 +62,7 @@ VALUES 	(1, 'Help!', '00:02:16'), (1, 'The Night Before', '00:02:30'), (1, 'Anot
 	   
 --Наполнение таблицы сборников
 
-INSERT INTO collection (name, year_public)
+INSERT INTO collection (name_collection, year_public)
 VALUES 	('1', 1999), ('Yellow Submarine Songtrack', 2000),
 		('One Day in Your Life', 1981), ('Anthology', 1986),
 		('50,000,000 Elvis Fans Can’t Be Wrong', 1959), ('Elvis for Everyone!', 1965),
