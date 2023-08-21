@@ -98,8 +98,8 @@ JOIN actorsalbum a3  ON a3.album_id = t2.album_id
 
 SELECT name_album 
 FROM album a  
-JOIN track t ON t.track_id = a.album_id  
-GROUP BY album_id 
+JOIN track t ON t.album_id  = a.album_id  
+GROUP BY a.album_id 
 HAVING COUNT(name_track) = ( 
 SELECT COUNT(track_id) FROM track t2 
 GROUP BY album_id  
