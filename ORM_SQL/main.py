@@ -21,19 +21,28 @@ def data_add(path):
         result = session.add(model(id=record.get('pk'), **record.get('fields')))
     return result
 
+def get_shops(name):
+    query = session.query(Book.title, Shop.name, Sale.price,Sale.date_sale,)\
+    .select_from(Shop).join(Stock).join(Book).join(Publisher).join(Sale)
+    if name.isdigit():
+        query = query.filter(Publisher.id == name).all()
+    else:
+        query = query.filter(Publisher.name == name).all()
+    for book, shop, price, date in query:
+        print(f"{book: <40} | {shop: <10} | {price: <8} | {date.strftime('%d-%m-%Y')}")
+
+
 if __name__ == '__main__':
     DSN = f'{driver_db}://{login_db}:{password_db}@{host_db}/{name_db}'
     engine = sqlalchemy.create_engine(DSN)
-    name = input('Введите имя: ')
-    # create_tables(engine) # создание таблиц
-    # drop_table(engine) # удаление таблиц
-
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    query = (session.query(Book.title, Shop.name, Sale.price, Sale.date_sale).\
-             join(Publisher).join(Stock).join(Shop).join(Sale)).filter(Publisher.name.like(f'%{name}%')).all()
-    pprint(query)
+    name = input('Введите имя или id: ')
+    create_tables(engine) # создание таблиц
+    drop_table(engine) # удаление таблиц
+    data_add(path='tests_data.json') # добавление данных из json
+    get_shops(name)  # выводит построчно факты покупки книг издателя
 
     session.commit()
     session.close()
